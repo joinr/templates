@@ -1,0 +1,48 @@
+# This is a template for pushing out org files that are compatible 
+# with both html and latex export.  Specifically, these files 
+# Support code highlighting - for clojure code - and typeset 
+# the code to look different from the main sections.  The 
+# design is meant for providing a quick template to inject 
+# clojure source into org docs, and provide an interactive, 
+# repl-friendly presentation.
+#+TITLE: Org Doc Template For HTML and Latex
+#+AUTHOR: T. Spoon
+#+DATE: 31 Aug 2016
+#+VERSION: 1.2
+#+STARTUP: showall
+# If we choose html export, we get dark backgrounds behind code blocks.
+
+#+HTML_HEAD: <style>pre.src {background-color: #303030; color: #e5e5e5;}</style>
+
+# These imports basically let us use colored boxes around our syntax-highlighted code.
+#+LaTeX_HEADER:\usepackage{tcolorbox}
+#+LaTeX_HEADER:\usepackage{etoolbox}
+#+LaTeX_HEADER:\usepackage{minted}
+#+LaTeX_HEADER:\BeforeBeginEnvironment{minted}{\begin{tcolorbox}[colback=black!5!white]}%
+#+LaTeX_HEADER:\AfterEndEnvironment{minted}{\end{tcolorbox}}%
+
+# Source code template
+#+BEGIN_COMMENT
+This is a source code example.
+Use this as a template for pasting code around.
+#+BEGIN_SRC clojure 
+  ;;Check out my comment yo.
+  (defn plus2 [x]
+    (+ x 2))
+  (for [x (range 100)]
+    (plus2 x))
+#+END_SRC 
+#+END_COMMENT
+
+* Topic 1
+  This is a source code example.
+  Use this as a template for pasting code around.
+  #+BEGIN_SRC clojure 
+    ;;Check out my comment yo.
+    (defn plus2 [x]
+      (+ x 2))
+    (for [x (range 100)]
+      (plus2 x))
+  #+END_SRC
+* Topic 2
+* Topic 3

@@ -1,0 +1,103 @@
+# This is a template for pushing out org files that are compatible 
+# with both html and latex export.  Specifically, these files 
+# Support code highlighting - for clojure code - and typeset 
+# the code to look different from the main sections.  The 
+# design is meant for providing a quick template to inject 
+# clojure source into org docs, and provide an interactive, 
+# repl-friendly presentation.
+#+TITLE: Org Presentation Template For HTML and Latex
+#+AUTHOR: T. Spoon
+#+DATE: 31 Aug 2016
+#+VERSION: 1.2
+# specifying the beamer startup gives access to a number of
+# keybindings which make configuring individual slides and components
+# of slides easier.  See, for instance, C-c C-b on a frame headline.
+#+STARTUP: beamer
+#+STARTUP: oddeven
+
+# we tell the exporter to use a specific LaTeX document class, as
+# defined in org-latex-classes.  By default, this does not include a
+# beamer entry so this needs to be defined in your configuration (see
+# the tutorial).
+#+LaTeX_CLASS: beamer
+#+LaTeX_CLASS_OPTIONS: [bigger]
+
+# Beamer supports alternate themes.  Choose your favourite here
+#+BEAMER_THEME: Madrid
+
+# the beamer exporter expects to be told which level of headlines
+# defines the frames.  We use the first level headlines for sections
+# and the second (hence H:2) for frames.
+#+OPTIONS:   H:2 toc:t
+
+# the following allow us to selectively choose headlines to export or not
+#+SELECT_TAGS: export
+#+EXCLUDE_TAGS: noexport
+
+# for a column view of options and configurations for the individual
+# frames
+#+COLUMNS: %20ITEM %13BEAMER_env(Env) %6BEAMER_envargs(Args) %4BEAMER_col(Col) %7BEAMER_extra(Extra)
+
+# If we choose html export, we get dark backgrounds behind code blocks.
+
+#+HTML_HEAD: <style>pre.src {background-color: #303030; color: #e5e5e5;}</style>
+
+# These imports basically let us use colored boxes around our syntax-highlighted code.
+#+LaTeX_HEADER:\usepackage{minted}
+#+LaTeX_HEADER:\usepackage{tcolorbox}
+#+LaTeX_HEADER:\usepackage{etoolbox}
+#+LaTeX_HEADER:\BeforeBeginEnvironment{minted}{\begin{tcolorbox}[colback=black!5!white]}%
+#+LaTeX_HEADER:\AfterEndEnvironment{minted}{\end{tcolorbox}}%
+
+
+# Source code template
+#+BEGIN_COMMENT
+This is a source code example.
+Use this as a template for pasting code around.
+#+BEGIN_SRC clojure
+  ;;Check out my comment yo.
+  (defn plus2 [x]
+    (+ x 2))
+  (for [x (range 100)]
+    (plus2 x))
+#+END_SRC 
+#+END_COMMENT
+
+* Introduction
+** Overview
+   This presentation provides an illustration of some of the capabilities of the *Beamer* export in =org= mode:
+
+   1. simple slides (this one),
+   2. slides with special blocks,
+   3. multi-column slides and
+   4. the use of *Babel* for literate programming.
+
+   This file should be exported using =M-x org-export-dispatch= specifying =l= for \LaTeX{} and then =P=, for instance, to generate the PDF.
+   
+* Methodology
+
+** A simple slide
+This slide consists of some text with a number of bullet points:
+
+- the first, very *important*, point!
+- the previous point shows the use of *bold* emphasis which is translated to a =\alert{}= directive in \LaTeX.
+
+The above list could be numbered or any other type of list and may include sub-lists.
+** Some Code!
+#+BEGIN_SRC clojure :exports code
+  ;;Check out my comment yo.
+  ;;We can insert formatted source thusly:
+  (defn plus2 [x]
+    (+ x 2))
+  ;;plus2 is a simple function that adds 2 to its input.
+  ;;Pipe that badboy through some transformations..
+  (def xs
+    (-> (range 100)
+        (map plus2)
+        (filter odd?)
+        (drop (rand-int 10))
+        (first)))
+  ;;xs should now be the first element of the
+  ;;resulting sequence.
+
+#+END_SRC
